@@ -1,5 +1,5 @@
-from cvzone.HandTrackingModule import HandDetector
-from dependencies.posemodule import posedetector
+from dependencies.BothModule import HandDetector
+from dependencies.BothModule import posedetector
 import cv2
 
 cap = cv2.VideoCapture(0)
@@ -49,19 +49,26 @@ while True:
 
     if LM[0] > rightShoulder[0]:
         if LM[0] > rightShoulder[0] and LM[1] < (LM[0]-rightShoulder[0]+rightShoulder[1]) and LM[1] > (-LM[0]+rightShoulder[0]+rightShoulder[1]):
-            print("Right side")
+            Position = "Right side"
 
     if LM[0] < rightShoulder[0]:
         if LM[0] < rightShoulder[0] and LM[1] > (LM[0]-rightShoulder[0]+rightShoulder[1]) and LM[1] < (-LM[0]+rightShoulder[0]+rightShoulder[1]):
-            print("Left side")
+            Position = "Left side"
 
     if LM[1] < rightShoulder[1]:
         if LM[1] < rightShoulder[1] and LM[0] > (LM[1]+rightShoulder[0]-rightShoulder[1]) and LM[0] < (-LM[1]+rightShoulder[0]+rightShoulder[1]):
-            print("Up side")
+            Position = "Up side"
 
     if LM[1] > rightShoulder[1]:
         if LM[1] > rightShoulder[1] and LM[0] < (LM[1]+rightShoulder[0]-rightShoulder[1]) and LM[0] > (-LM[1]+rightShoulder[0]+rightShoulder[1]):
-            print("Down side")
+            Postion = "Down side"
+
+    Time = datetime.now().strftime("%Y-%m-%d %H-%M-%S\n")
+    with open("patient.csv", 'w')as f:
+        data = csv.writer(f)
+        header=["Time", "Position"]
+        data.writerow([Time, Positon])
+            
     cv2.imshow("Image", img)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
